@@ -1,0 +1,50 @@
+name: Daily Logger
+
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-daily-script:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Debug env
+      run: |
+        echo "Checking environment variables..."
+        echo "SUPABASE_URL=$SUPABASE_URL"
+        echo "SUPABASE_KEY is set? ${{ secrets.SUPABASE_KEY != '' }}"
+
+    - name: Run log_file script
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      run: |
+        python log_file.py
+
+
+
+    - name: Commit updates
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "actions@github.com"
+        git add .
+        git commit -m "Daily update" || echo "No changes to commit"
+        git push

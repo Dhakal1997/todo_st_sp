@@ -14,7 +14,7 @@ supabase: Client = create_client(url, key)
 
 response = supabase.table("todolist").select("*").execute().data
 
-print(response)
+# print(response)
 
 
 
