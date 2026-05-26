@@ -1,6 +1,16 @@
 import streamlit as st 
 from supabase_client import get_supabase
 
+# Creating login sidebar
+st.sidebar.title("Login Form")
+#st.sidebar.markdown("This is a streamlit sidebar")
+st.sidebar.text_input("Enter username",placeholder="Username") 
+st.sidebar.text_input("Enter Password",placeholder="Password") 
+st.sidebar.button("Login")
+# st.sidebar.text("Don't have a account?")
+#forgot password and create account
+
+
 supabase = get_supabase()
 
 todo_list = supabase.table("todolist").select("*").execute().data
