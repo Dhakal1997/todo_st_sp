@@ -6,15 +6,13 @@ load_dotenv()
 
 url: str = os.environ["SUPABASE_URL"]
 key: str = os.environ["SUPABASE_KEY"]
+
+# CREATE ONLY ONCE
+supabase: Client = create_client(url, key)
+
 def get_supabase() -> Client:
-    return create_client(url, key)
-# supabase: Client = create_client(url, key)
+    return supabase
 
-# name = str(input("Enter todo"))
-
-# response = supabase.table("todolist").select("*").execute().data
-
-# print(response)
 
 
 
