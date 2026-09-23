@@ -1,7 +1,7 @@
 import streamlit as st 
 from supabase_client import get_supabase
-from middleware.auth import sign_in
-from middleware.auth import sign_up
+from .middleware.auth import sign_in
+from .middleware.auth import sign_up
 import time
 
 supabase = get_supabase()
