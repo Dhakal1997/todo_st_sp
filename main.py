@@ -85,7 +85,7 @@ with col3:
 todo_item = st.text_input("Input a todo",placeholder=" Enter todo") 
 if st.button("Add a todo"):
    if len(todo_item) >= 5: 
-    #    todo_list.append(todo_item) 
+    #    todo_list.append(todo_item) added user_id to the insert query
         supabase.table("todolist").insert({"name":todo_item, "user_id": st.session_state["user"].user.id}).execute()
         st.success("Todo Added")
         st.rerun() 
