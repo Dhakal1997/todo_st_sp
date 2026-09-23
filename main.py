@@ -1,6 +1,8 @@
 import streamlit as st 
 from supabase_client import get_supabase
 from middleware.auth import sign_in
+from middleware.auth import sign_up
+import time
 
 supabase = get_supabase()
 
@@ -18,15 +20,39 @@ col1, col2 = st.sidebar.columns(2)
 with col1:
     if col1.button("Login"):
         user_session = sign_in(username, password)
-        # st.write(user_session.user.email)
-        st.write(supabase.auth.get_user())
+        
+        # st.write(supabase.auth.get_user())
         if user_session and user_session.user.email:
             st.session_state["user"] = user_session 
             st.sidebar.success(f"Welcome {user_session.user.email}")
+            time.sleep(2)
             st.rerun()
+        else:
+           st.error("signin Unsucessful.Please check your email")   
+    
         
 with col2:
-    col2.button("Sign Up")   
+   if col2.button("Sign Up") :
+       user_ses = sign_up(username, password) 
+    #    st.write(supabase.auth.get_user())
+       if user_ses and user_ses.user.email:
+           st.session_state["user"] = user_ses
+           st.sidebar.success(f"Welcome. Please login using  {user_ses.user.email}")
+           time.sleep(2)
+           st.rerun()
+       else:
+           st.error("signup Unsucessful.")   
+    
+      
+       
+       
+       
+
+
+if st.sidebar.button("Sign Out"):
+        st.session_state["user"] = None
+        st.rerun()
+              
     
     
 # st.sidebar.text("Don't have a account?")
@@ -60,7 +86,7 @@ todo_item = st.text_input("Input a todo",placeholder=" Enter todo")
 if st.button("Add a todo"):
    if len(todo_item) >= 5: 
     #    todo_list.append(todo_item) 
-        supabase.table("todolist").insert({"name":todo_item}).execute()
+        supabase.table("todolist").insert({"name":todo_item, "user_id": st.session_state["user"].user.id}).execute()
         st.success("Todo Added")
         st.rerun() 
     #    st.write(todo_list)

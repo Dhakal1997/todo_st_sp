@@ -11,4 +11,12 @@ def sign_in(email,password):
         st.sidebar.error(f"login failed: {e}")
           
           
-# def 
+def sign_up(email,password):
+    try: 
+        user = supabase.auth.sign_up({"email":email, "password":password})
+        return user
+    except Exception as e:
+        st.error(f"Registration failed: {e}")
+        
+
+        
